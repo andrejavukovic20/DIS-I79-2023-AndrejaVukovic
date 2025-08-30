@@ -1,7 +1,17 @@
-# IDE / build artefakti
-.metadata/
+# Build
+target/
+**/target/
+
+# Eclipse / STS
 .settings/
 .project
 .classpath
+.metadata/
+
+# IntelliJ
 .idea/
-**/target/
+*.iml
+
+# OS / misc
+.DS_Store
+*.log
