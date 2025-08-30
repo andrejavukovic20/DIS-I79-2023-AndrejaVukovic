@@ -1,0 +1,18 @@
+package notification;
+
+@SpringBootTest
+public class NotificationServiceApplicationTest {
+
+	  @Test
+	    void contextLoads() {
+	        // prolazi ako se app context digne
+	    }
+
+	    @TestConfiguration
+	    static class TestConfig {
+	        @Bean
+	        JavaMailSender javaMailSender() {
+	            return mock(JavaMailSender.class);
+	        }
+	    }
+}

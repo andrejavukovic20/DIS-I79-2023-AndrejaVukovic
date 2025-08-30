@@ -1,0 +1,50 @@
+package delivery;
+
+import delivery.events.OrderEventDto;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
+import org.mockito.ArgumentCaptor;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+public class DeliveryListenerTest {
+
+	  	@Test
+	    @Tag("slow")
+	    @Timeout(20) // 8s realnog spavanja + buffer
+	    void handleOrderReady_emitsDelivered_withRealSleep() throws Exception {
+	        // arrange
+	        DeliveryNotifier notifier = mock(DeliveryNotifier.class);
+	        DeliveryListener listener = new DeliveryListener(notifier); // bez promjene logike
+
+	        OrderEventDto ready = new OrderEventDto();
+	        ready.setOrderId(123L);
+	        ready.setChef("ANA");
+	        ready.setPrepSeconds(5);
+	        ready.setCorrelationId("corr-1");
+
+	        long start = System.currentTimeMillis();
+
+	        // act
+	        listener.handleOrderReady(ready);
+
+	        long elapsedMs = System.currentTimeMillis() - start;
+
+	        // assert: provjeri da je zaista "spavao" ~8s (donja granica je dovoljna)
+	        assertTrue(elapsedMs >= 7_800L, "Očekivano trajanje ≥ ~8s, bilo je: " + elapsedMs + " ms");
+
+	        ArgumentCaptor<OrderEventDto> cap = ArgumentCaptor.forClass(OrderEventDto.class);
+	        verify(notifier).sendDelivered(cap.capture());
+	        verifyNoMoreInteractions(notifier);
+
+	        OrderEventDto delivered = cap.getValue();
+	        assertEquals("DELIVERED", delivered.getEventType());
+	        assertEquals("DELIVERY", delivered.getSource());
+	        assertEquals(123L, delivered.getOrderId());
+	        assertEquals("corr-1", delivered.getCorrelationId());
+	        assertNotNull(delivered.getOccuredAt());
+	        // eventId je random — ne provjeravamo ga
+	    }
+}

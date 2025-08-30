@@ -1,0 +1,34 @@
+package kitchen.store;
+
+import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import kitchen.events.OrderEventDto;
+import kitchen.repository.KitchenEventRepository;
+
+@Service
+public class KitchenEventStore {
+
+	private final KitchenEventRepository repo;
+	private final ObjectMapper mapper;
+	
+	public KitchenEventStore(KitchenEventRepository repo, ObjectMapper mapper) {
+		this.repo = repo;
+		this.mapper = mapper;
+	}
+	
+	public void save(OrderEventDto dto) {
+	    KitchenEventEntity e = new KitchenEventEntity();
+	    e.setEventId(dto.getEventId());
+	    e.setOrderId(dto.getOrderId());
+	    e.setEventType(dto.getEventType());
+	    e.setSource(dto.getSource());
+	    e.setChef(dto.getChef());
+	    e.setPrepSeconds(dto.getPrepSeconds());
+	    e.setCorrelationId(dto.getCorrelationId());
+	    e.setOccuredAt(dto.getOccuredAt());
+
+	    repo.save(e);
+	  }
+}

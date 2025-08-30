@@ -1,0 +1,17 @@
+package kitchen;
+
+import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+@Service
+public class KitchenEventService {
+
+	private final KitchenEventRepository repo;
+	private final ObjectMapper mapper;
+	
+	public KitchenEventService(KitchenEventRepository repo, ObjectMapper mapper) {
+		this.repo = repo;
+		this.mapper = mapper;
+	}
+}

@@ -1,0 +1,25 @@
+package notification;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.mail.javamail.JavaMailSender;
+
+import static org.mockito.Mockito.mock;
+@SpringBootTest
+public class NotificationServiceApplicationTest {
+
+	  @Test
+	    void contextLoads() {
+	        // prolazi ako se app context digne
+	    }
+
+	    @TestConfiguration
+	    static class TestConfig {
+	        @Bean
+	        JavaMailSender javaMailSender() {
+	            return mock(JavaMailSender.class);
+	        }
+	    }
+}

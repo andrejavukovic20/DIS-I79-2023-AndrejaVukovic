@@ -22,17 +22,14 @@ public class RabbitJsonConfig {
 
 	@Bean
 	public Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
-	    // 1) ObjectMapper sa JavaTimeModule
 	    ObjectMapper mapper = Jackson2ObjectMapperBuilder.json()
 	            .modules(new JavaTimeModule())
-	            .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS) // ISO-8601 umjesto epoch long
+	            .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS) 
 	            .build();
 
 	    Jackson2JsonMessageConverter converter = new Jackson2JsonMessageConverter(mapper);
 
-	    // 2) Type mapper + trust paketi + INFERRED precedence
 	    DefaultJackson2JavaTypeMapper typeMapper = new DefaultJackson2JavaTypeMapper();
-	    // NAVEDI SVE pakete gdje koristite DTO (bolje od "*")
 	    typeMapper.setTrustedPackages(
 	            "order.events", "kitchen.events", "delivery.events", "notification.events", "events"
 	    );

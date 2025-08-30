@@ -1,0 +1,7 @@
+package kitchen;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface KitchenEventRepository extends JpaRepository<KitchenEventRepository, Long> {
+
+}

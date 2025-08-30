@@ -1,0 +1,61 @@
+package menu.integration;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import menu.Category;
+import menu.model.Menu;
+import menu.repository.MenuRepository;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
+
+import static org.hamcrest.Matchers.containsString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+@ActiveProfiles("test")
+public class MenuIntegrationTest {
+	 	@Autowired MockMvc mvc;
+	 	@Autowired(required = false) ObjectMapper om;
+	    @Autowired MenuRepository menuRepository;
+
+	    @Test
+	    void crudFlow() throws Exception {
+	        // CREATE
+	        var item = new Menu(null, "Pie", "Apple", 3.2, Category.DESERT, true, 4);
+	        String createMsg = mvc.perform(post("/menu")
+	                .contentType(MediaType.APPLICATION_JSON)
+	                .content(om.writeValueAsString(item)))
+	        		.andDo(print())
+	                .andExpect(status().isCreated())
+	                .andReturn().getResponse().getContentAsString();
+
+	        long id = Long.parseLong(createMsg.replaceAll("\\D+", ""));
+
+	        // READ
+	        mvc.perform(get("/menu/" + id))
+	                .andExpect(status().isOk())
+	                .andExpect(jsonPath("$.name").value("Pie"))
+	                .andExpect(jsonPath("$.category").value("DESERT"));
+
+	        // UPDATE
+	        item.setName("Pie XXL");
+	        mvc.perform(put("/menu/" + id)
+	                .contentType(MediaType.APPLICATION_JSON)
+	                .content(om.writeValueAsString(item)))
+	                .andExpect(status().isOk())
+	                .andExpect(content().string(containsString("Menu item updated with ID: " + id)));
+
+	        // DELETE
+	        mvc.perform(delete("/menu/" + id))
+	                .andExpect(status().isOk())
+	                .andExpect(content().string(containsString("Menu item deleted: ID " + id)));
+	    }
+}

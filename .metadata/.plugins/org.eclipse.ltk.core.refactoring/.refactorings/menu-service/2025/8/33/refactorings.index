@@ -1,0 +1,7 @@
+1755445563358	Rename type 'MenuItem'
+1755445600293	Rename type 'MenuItemController'
+1755445612160	Rename type 'MenuItemRepository'
+1755445647022	Rename type 'Stock'
+1755446052088	Rename type 'MenuItemService'
+1755446108867	Rename field 'menuItemRepository'
+1755446148780	Rename field 'menuItemService'

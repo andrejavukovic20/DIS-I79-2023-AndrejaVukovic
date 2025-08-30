@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
-
+import org.springframework.amqp.rabbit.annotation.Queue;
 import delivery.events.OrderEventDto;
 import delivery.events.OrderQueues;
 
@@ -18,7 +18,7 @@ public class DeliveryListener {
 		this.notifier = notifier;
 	}
 	
-	@RabbitListener(queues = OrderQueues.ORDER_READY) 
+	@RabbitListener(queuesToDeclare = @Queue(value = OrderQueues.ORDER_READY, durable = "true"))
 	public void handleOrderReady(OrderEventDto ready) throws InterruptedException {
 		 System.out.println("[DELIVERY] Received ready for orderId=" + ready.getOrderId()
 								         + " chef=" + ready.getChef()
@@ -29,15 +29,15 @@ public class DeliveryListener {
 		
 		status = DeliveryStatus.ASSIGNED;
         System.out.println("[DELIVERY] Status=" + status + " orderId=" + ready.getOrderId());
-		Thread.sleep(1000);
+		Thread.sleep(2000);
 		
 		status = DeliveryStatus.PICKED_UP;
         System.out.println("[DELIVERY] Status=" + status + " orderId=" + ready.getOrderId());
-		Thread.sleep(2000);
+		Thread.sleep(3000);
 
 		status = DeliveryStatus.IN_TRANSIT;
         System.out.println("[DELIVERY] Status=" + status + " orderId=" + ready.getOrderId());
-		Thread.sleep(2000);
+		Thread.sleep(3000);
 
 		status = DeliveryStatus.DELIVERED;
         System.out.println("[DELIVERY] Status=" + status + " orderId=" + ready.getOrderId());

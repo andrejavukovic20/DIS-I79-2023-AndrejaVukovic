@@ -1,0 +1,81 @@
+package order;
+
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import order.MenuClient;
+import order.Order;
+import order.OrderEventPublisher;
+import order.OrderRepository;
+import order.OrderStatus;
+
+@Service
+public class OrderService {
+	private final OrderRepository orderRepository;
+	private final MenuClient menuClient;
+	private final OrderEventPublisher eventPublisher;
+	
+	public OrderService(OrderRepository orderRepository, MenuClient menuClient, OrderEventPublisher eventPublisher) {
+		this.orderRepository = orderRepository;
+		this.menuClient = menuClient;
+		this.eventPublisher = eventPublisher;
+	}
+	
+	public List<Order> getAllOrders() {
+		return orderRepository.findAll();
+	}
+	
+	public Order getOrderById(Long id) {
+		return orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Item not found"));
+	}
+	
+	public Order createOrder(Order order) {
+	    String correlationId = java.util.UUID.randomUUID().toString();
+
+	    List<Long> missing = menuClient.reserveItems(order.getMenuIds());
+	    if (!missing.isEmpty()) {
+	        eventPublisher.publishOutOfStockEvent(null, missing, correlationId);
+
+	        // snimi audit trag
+	        order.setStatus(OrderStatus.CANCELLED);
+	        order.setCreatedAt(java.time.LocalDateTime.now());
+	        orderRepository.save(order);
+
+	        // vrati odmah grešku
+	        throw new ResponseStatusException(
+	            HttpStatus.CONFLICT,
+	            "OUT_OF_STOCK: " + missing
+	        );
+	    }
+
+	    order.setStatus(OrderStatus.CREATED);
+	    order.setCreatedAt(java.time.LocalDateTime.now());
+	    Order saved = orderRepository.save(order);
+
+	    eventPublisher.publishOrderCreatedEvent(saved.getId(), correlationId);
+	    return saved;
+	}
+	
+	public Order updateOrder(Long id, Order newOrder) {
+		Order existing = getOrderById(id);
+		existing.setMenuIds(newOrder.getMenuIds());
+		return orderRepository.save(existing);
+	}
+	
+	public void deleteOrder(Long id) {
+		if (!orderRepository.existsById(id)) {
+			throw new RuntimeException("Order with ID " + id + " not found");
+		}
+		
+		orderRepository.deleteById(id);
+	}
+	
+	 public Order updateOrderStatus(Long id, OrderStatus newStatus) {
+	        Order order = getOrderById(id);
+	        order.setStatus(newStatus);
+	        return orderRepository.save(order);
+	 }
+}

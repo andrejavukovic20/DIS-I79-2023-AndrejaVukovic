@@ -1,0 +1,78 @@
+package order.model;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import order.OrderStatus;
+
+@Entity
+@Table(name = "orders")
+public class Order {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	@ElementCollection
+	private List<Long> menuIds;
+	
+	@Enumerated(EnumType.STRING)
+	private OrderStatus status;
+	
+	private LocalDateTime createdAt;
+
+	public Order() {
+	}
+	
+	public Order(Long id, List<Long> menuIds, OrderStatus status, LocalDateTime createdAt) {
+		this.id = id;
+		this.menuIds = menuIds;
+		this.status = status;
+		this.createdAt = createdAt;
+	}
+	
+	public Order(List<Long> menuIds) {
+		this.menuIds = menuIds;
+		this.status = status;
+		this.createdAt  = LocalDateTime.now();
+	}
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public List<Long> getMenuIds() {
+		return menuIds;
+	}
+
+	public void setMenuIds(List<Long> menuIds) {
+		this.menuIds = menuIds;
+	}
+
+	public OrderStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(OrderStatus status) {
+		this.status = status;
+	}
+
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+}

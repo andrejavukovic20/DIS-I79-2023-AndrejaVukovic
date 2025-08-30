@@ -1,0 +1,16 @@
+package kitchen.service;
+
+import org.springframework.stereotype.Service;
+
+import kitchen.KitchenEventRepository;
+
+@Service
+public class KitchenEventService {
+
+	private final KitchenEventRepository repo;
+	
+	public KitchenEventService(KitchenEventRepository repo) {
+		this.repo = repo;
+		
+	}
+}

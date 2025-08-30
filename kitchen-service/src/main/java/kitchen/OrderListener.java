@@ -5,30 +5,33 @@ import org.springframework.stereotype.Component;
 
 import kitchen.events.OrderEventDto;
 import kitchen.events.OrderQueues;
+import kitchen.store.KitchenEventStore;
 
 import java.time.Instant;
 import java.util.Random;
 import java.util.UUID;
-
+import org.springframework.amqp.rabbit.annotation.Queue;
 @Component
 public class OrderListener {
 
 	private final ReadyNotifier readyNotifier;
+	private final KitchenEventStore service;
 	private final Random random = new Random();
 	
-	public OrderListener(ReadyNotifier readyNotifier) {
+	public OrderListener(ReadyNotifier readyNotifier, KitchenEventStore service) {
 		this.readyNotifier = readyNotifier;
+		this.service = service;
 	}
 	
-	@RabbitListener(queues = OrderQueues.ORDER_CREATED)
+	@RabbitListener(queuesToDeclare = @Queue(value = OrderQueues.ORDER_CREATED, durable = "true"))
 	public void handleOrderCreated(OrderEventDto event) throws InterruptedException {
-		 System.out.println("[KITCHEN] Received CREATED for orderId=" + event.getOrderId()
+		System.out.println("[KITCHEN] Received CREATED for orderId=" + event.getOrderId()
          										+ " corrId=" + event.getCorrelationId());		
 		
-		 Chef assignedChef = Chef.getRandomChef();
+		service.save(event);
 		
+		Chef assignedChef = Chef.getRandomChef();
 		int preparationTime = random.nextInt(5) + 3;
-		
 		Thread.sleep(preparationTime * 1000L);
 		
 		if (preparationTime > 6) {
@@ -46,5 +49,6 @@ public class OrderListener {
 		ready.setOccuredAt(Instant.now());
 		
 		readyNotifier.sendOrderReady(ready);
+		service.save(ready);
 	}
 }

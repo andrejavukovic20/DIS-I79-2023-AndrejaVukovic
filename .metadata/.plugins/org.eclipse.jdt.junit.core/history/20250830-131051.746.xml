@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="menu-service" project="menu-service" tests="15" started="15" failures="0" errors="1" ignored="0">
+  <testsuite name="menu.integration.MenuIntegrationTest" time="0.005" displayname="MenuIntegrationTest" uniqueid="[engine:junit-jupiter]/[class:menu.integration.MenuIntegrationTest]">
+    <testcase name="crudFlow" classname="menu.integration.MenuIntegrationTest" time="0.005" displayname="crudFlow()" uniqueid="[engine:junit-jupiter]/[class:menu.integration.MenuIntegrationTest]/[method:crudFlow()]">
+      <error>java.lang.NullPointerException: Cannot invoke "com.fasterxml.jackson.databind.ObjectMapper.writeValueAsString(Object)" because "this.om" is null&#13;
+	at menu.integration.MenuIntegrationTest.crudFlow(MenuIntegrationTest.java:28)&#13;
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)&#13;
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)&#13;
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)&#13;
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:727)&#13;
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)&#13;
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)&#13;
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:156)&#13;
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:147)&#13;
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:86)&#13;
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103)&#13;
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93)&#13;
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)&#13;
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)&#13;
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)&#13;
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)&#13;
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:92)&#13;
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:86)&#13;
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$7(TestMethodTestDescriptor.java:217)&#13;
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)&#13;
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:213)&#13;
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:138)&#13;
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:68)&#13;
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:151)&#13;
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)&#13;
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)&#13;
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)&#13;
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)&#13;
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)&#13;
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)&#13;
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)&#13;
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)&#13;
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)&#13;
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)&#13;
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)&#13;
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)&#13;
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)&#13;
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)&#13;
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)&#13;
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)&#13;
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)&#13;
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)&#13;
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)&#13;
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)&#13;
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)&#13;
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)&#13;
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)&#13;
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)&#13;
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)&#13;
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)&#13;
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)&#13;
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)&#13;
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)&#13;
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)&#13;
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:147)&#13;
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:127)&#13;
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:90)&#13;
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:55)&#13;
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:102)&#13;
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:54)&#13;
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:114)&#13;
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:95)&#13;
+	at org.junit.platform.launcher.core.DefaultLauncherSession$DelegatingLauncher.execute(DefaultLauncherSession.java:91)&#13;
+	at org.junit.platform.launcher.core.SessionPerRequestLauncher.execute(SessionPerRequestLauncher.java:60)&#13;
+	at org.eclipse.jdt.internal.junit5.runner.JUnit5TestReference.run(JUnit5TestReference.java:98)&#13;
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:40)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:529)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:756)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:452)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:210)&#13;
+&#13;
+</error>
+    </testcase>
+  </testsuite>
+  <testsuite name="menu.service.MenuServiceTest" time="2.744" displayname="MenuServiceTest" uniqueid="[engine:junit-jupiter]/[class:menu.service.MenuServiceTest]">
+    <testcase name="testGetAvailableItemsByIds" classname="menu.service.MenuServiceTest" time="2.637" displayname="testGetAvailableItemsByIds()" uniqueid="[engine:junit-jupiter]/[class:menu.service.MenuServiceTest]/[method:testGetAvailableItemsByIds()]"/>
+    <testcase name="testGetByCategoryValid" classname="menu.service.MenuServiceTest" time="0.003" displayname="testGetByCategoryValid()" uniqueid="[engine:junit-jupiter]/[class:menu.service.MenuServiceTest]/[method:testGetByCategoryValid()]"/>
+    <testcase name="testGetAvailableItems" classname="menu.service.MenuServiceTest" time="0.003" displayname="testGetAvailableItems()" uniqueid="[engine:junit-jupiter]/[class:menu.service.MenuServiceTest]/[method:testGetAvailableItems()]"/>
+    <testcase name="testCreateMenuItemOk" classname="menu.service.MenuServiceTest" time="0.01" displayname="testCreateMenuItemOk()" uniqueid="[engine:junit-jupiter]/[class:menu.service.MenuServiceTest]/[method:testCreateMenuItemOk()]"/>
+    <testcase name="testDeleteByIdNotExists" classname="menu.service.MenuServiceTest" time="0.008" displayname="testDeleteByIdNotExists()" uniqueid="[engine:junit-jupiter]/[class:menu.service.MenuServiceTest]/[method:testDeleteByIdNotExists()]"/>
+    <testcase name="testDeleteById" classname="menu.service.MenuServiceTest" time="0.003" displayname="testDeleteById()" uniqueid="[engine:junit-jupiter]/[class:menu.service.MenuServiceTest]/[method:testDeleteById()]"/>
+    <testcase name="testReserveItemsSomeMissing" classname="menu.service.MenuServiceTest" time="0.011" displayname="testReserveItemsSomeMissing()" uniqueid="[engine:junit-jupiter]/[class:menu.service.MenuServiceTest]/[method:testReserveItemsSomeMissing()]"/>
+    <testcase name="testUpdateMenuItemOk" classname="menu.service.MenuServiceTest" time="0.015" displayname="testUpdateMenuItemOk()" uniqueid="[engine:junit-jupiter]/[class:menu.service.MenuServiceTest]/[method:testUpdateMenuItemOk()]"/>
+    <testcase name="testGetMenuItemByIdExists" classname="menu.service.MenuServiceTest" time="0.002" displayname="testGetMenuItemByIdExists()" uniqueid="[engine:junit-jupiter]/[class:menu.service.MenuServiceTest]/[method:testGetMenuItemByIdExists()]"/>
+    <testcase name="testCreateMenuItemNullCategory" classname="menu.service.MenuServiceTest" time="0.003" displayname="testCreateMenuItemNullCategory()" uniqueid="[engine:junit-jupiter]/[class:menu.service.MenuServiceTest]/[method:testCreateMenuItemNullCategory()]"/>
+    <testcase name="testGetAllMenuItem" classname="menu.service.MenuServiceTest" time="0.004" displayname="testGetAllMenuItem()" uniqueid="[engine:junit-jupiter]/[class:menu.service.MenuServiceTest]/[method:testGetAllMenuItem()]"/>
+    <testcase name="testGetByCategoryInvalid" classname="menu.service.MenuServiceTest" time="0.016" displayname="testGetByCategoryInvalid()" uniqueid="[engine:junit-jupiter]/[class:menu.service.MenuServiceTest]/[method:testGetByCategoryInvalid()]"/>
+    <testcase name="testGetMenuItemByIdNotExists" classname="menu.service.MenuServiceTest" time="0.003" displayname="testGetMenuItemByIdNotExists()" uniqueid="[engine:junit-jupiter]/[class:menu.service.MenuServiceTest]/[method:testGetMenuItemByIdNotExists()]"/>
+    <testcase name="testReserveItemsAllOk" classname="menu.service.MenuServiceTest" time="0.007" displayname="testReserveItemsAllOk()" uniqueid="[engine:junit-jupiter]/[class:menu.service.MenuServiceTest]/[method:testReserveItemsAllOk()]"/>
+  </testsuite>
+</testrun>

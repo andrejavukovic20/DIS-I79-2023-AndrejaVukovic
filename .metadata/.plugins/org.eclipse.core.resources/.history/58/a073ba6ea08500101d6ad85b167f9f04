@@ -1,0 +1,9 @@
+package delivery;
+
+public class DeliveryServiceApplicationTests {
+
+	  @Test
+	    void contextLoads() {
+	        // prolazi ako se app context podigne bez izuzetka
+	    }
+}

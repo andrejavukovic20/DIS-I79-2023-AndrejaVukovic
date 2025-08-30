@@ -1,0 +1,144 @@
+package menu.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.mockito.ArgumentCaptor;
+
+import menu.Category;
+import menu.model.Menu;
+import menu.repository.MenuRepository;
+
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+public class MenuServiceTest {
+
+	private MenuRepository repo;
+    private MenuService service;
+
+    @BeforeEach
+    void setUp() {
+        repo = mock(MenuRepository.class);
+        service = new MenuService(repo);
+    }
+
+    private Menu sample(Long id) {
+        return new Menu(id, "Espresso", "Strong coffee", 2.5, Category.DRINK, true, 5);
+    }
+
+    @Test
+    void getMenuItemById_found() {
+        when(repo.findById(1L)).thenReturn(Optional.of(sample(1L)));
+        Menu m = service.getMenuItemById(1L);
+        assertThat(m.getName()).isEqualTo("Espresso");
+    }
+
+    @Test
+    void getMenuItemById_notFound() {
+        when(repo.findById(1L)).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> service.getMenuItemById(1L))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("Item not found");
+    }
+
+    @Test
+    void createMenuItem_ok() {
+        Menu toSave = sample(null);
+        when(repo.save(any(Menu.class))).thenAnswer(inv -> {
+            Menu m = inv.getArgument(0);
+            m.setId(42L);
+            return m;
+        });
+        Menu saved = service.createMenuItem(toSave);
+        assertThat(saved.getId()).isEqualTo(42L);
+    }
+
+    @Test
+    void createMenuItem_nullCategory_throws() {
+        Menu toSave = sample(null);
+        toSave.setCategory(null);
+        assertThatThrownBy(() -> service.createMenuItem(toSave))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Category is required.");
+    }
+
+    @Test
+    void updateMenuItem_copiesFields_andSaves() {
+        Menu existing = sample(5L);
+        when(repo.findById(5L)).thenReturn(Optional.of(existing));
+        when(repo.save(any(Menu.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        Menu incoming = new Menu(null, "Latte", "Milky", 3.0, Category.DRINK, true, 7);
+
+        Menu updated = service.updateMenuItem(5L, incoming);
+
+        assertThat(updated.getName()).isEqualTo("Latte");
+        assertThat(updated.getPrice()).isEqualTo(3.0);
+        verify(repo).save(existing);
+    }
+
+    @Test
+    void deleteMenuItem_ok() {
+        when(repo.existsById(9L)).thenReturn(true);
+        service.deleteMenuItem(9L);
+        verify(repo).deleteById(9L);
+    }
+
+    @Test
+    void deleteMenuItem_notExists_throws() {
+        when(repo.existsById(9L)).thenReturn(false);
+        assertThatThrownBy(() -> service.deleteMenuItem(9L))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("Menu item with ID 9 does not exist.");
+    }
+
+    @Test
+    void getByCategory_valid() {
+        when(repo.findByCategory(Category.FOOD)).thenReturn(List.of(
+                new Menu(1L, "Burger", "Beef", 7.5, Category.FOOD, true, 10)
+        ));
+        var list = service.getByCatgory("FOOD");
+        assertThat(list).hasSize(1);
+    }
+
+    @Test
+    void getByCategory_invalid_throwsRuntime() {
+        assertThatThrownBy(() -> service.getByCatgory("UNKNOWN"))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("Invalid category");
+    }
+
+    @Test
+    void reserveItems_allAvailable_decrementsAndSaves() {
+        List<Long> ids = List.of(1L, 2L);
+        Menu m1 = new Menu(1L, "A", "a", 1.0, Category.FOOD, true, 2);
+        Menu m2 = new Menu(2L, "B", "b", 2.0, Category.DRINK, true, 1);
+
+        when(repo.findAllForUpdate(ids)).thenReturn(List.of(m1, m2));
+
+        List<Long> missing = service.reserveItems(ids);
+        assertThat(missing).isEmpty();
+
+        ArgumentCaptor<List<Menu>> captor = ArgumentCaptor.forClass(List.class);
+        verify(repo).saveAll(captor.capture());
+        assertThat(captor.getValue()).extracting(Menu::getStock)
+                .containsExactly(1, 0);
+    }
+
+    @Test
+    void reserveItems_someMissing_returnsConflictList() {
+        List<Long> ids = List.of(1L, 2L, 3L);
+        Menu m1 = new Menu(1L, "A", "a", 1.0, Category.FOOD, true, 0); // out of stock
+        Menu m2 = new Menu(2L, "B", "b", 2.0, Category.DRINK, false, 5); // not available
+
+        when(repo.findAllForUpdate(ids)).thenReturn(List.of(m1, m2)); // id=3 uopšte ne postoji
+
+        List<Long> missing = service.reserveItems(ids);
+        assertThat(missing).containsExactlyInAnyOrder(1L, 2L, 3L);
+
+        verify(repo, never()).saveAll(anyList());
+    }
+}

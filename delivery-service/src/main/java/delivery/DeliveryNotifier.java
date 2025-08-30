@@ -17,5 +17,6 @@ public class DeliveryNotifier {
 	  public void sendDelivered(OrderEventDto dto) {
 	       rabbitTemplate.convertAndSend(OrderQueues.ORDER_DELIVERED, dto);
 	       System.out.println("[DELIVERY] Published deliverd event for orderId=" + dto.getOrderId()
-           									+ " corrId=" + dto.getCorrelationId());	  }
+           									+ " corrId=" + dto.getCorrelationId());	  
+	  }
 }

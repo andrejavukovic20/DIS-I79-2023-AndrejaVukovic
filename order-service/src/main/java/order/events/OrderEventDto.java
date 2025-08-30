@@ -1,6 +1,7 @@
 package order.events;
 
 import java.time.Instant;
+import java.util.List;
 
 public class OrderEventDto {
 
@@ -12,6 +13,8 @@ public class OrderEventDto {
 	private String correlationId;
 	private Integer prepSeconds;
 	private Instant occuredAt;
+	
+	private List<Long> missingItemIds;
 	
 	public OrderEventDto() {}
 
@@ -77,5 +80,13 @@ public class OrderEventDto {
 
 	public void setOccuredAt(Instant occuredAt) {
 		this.occuredAt = occuredAt;
-	}	
+	}
+
+	public List<Long> getMissingItemIds() {
+		return missingItemIds;
+	}
+
+	public void setMissingItemIds(List<Long> missingItemIds) {
+		this.missingItemIds = missingItemIds;
+	}
 }

@@ -17,7 +17,7 @@ public class EmailService {
 	        message.setTo(toEmail);
 	        message.setSubject(subject);
 	        message.setText(body);
-	        message.setFrom("andrejatestmejl@gmail.com"); // ili uzmi iz konfiguracije
+	        message.setFrom("andrejatestmejl@gmail.com"); 
 
 	        mailSender.send(message);
 	        System.out.println("Email sent to: " + toEmail);

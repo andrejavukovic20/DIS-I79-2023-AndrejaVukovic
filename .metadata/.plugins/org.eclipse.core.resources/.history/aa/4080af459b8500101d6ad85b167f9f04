@@ -1,0 +1,5 @@
+package kitchen.store;
+
+public class KitchenEventsStoreTest {
+
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="kitchen-service" project="kitchen-service" tests="5" started="5" failures="0" errors="0" ignored="0">
+  <testsuite name="kitchen.store.KitchenEventsStoreTest" time="2.259" displayname="KitchenEventsStoreTest" uniqueid="[engine:junit-jupiter]/[class:kitchen.store.KitchenEventsStoreTest]">
+    <testcase name="save_mapsDtoToEntity_andPersists" classname="kitchen.store.KitchenEventsStoreTest" time="2.259" displayname="save_mapsDtoToEntity_andPersists()" uniqueid="[engine:junit-jupiter]/[class:kitchen.store.KitchenEventsStoreTest]/[method:save_mapsDtoToEntity_andPersists()]"/>
+  </testsuite>
+  <testsuite name="kitchen.controller.KitchenEventControllerWebTest" time="0.221" displayname="KitchenEventControllerWebTest" uniqueid="[engine:junit-jupiter]/[class:kitchen.controller.KitchenEventControllerWebTest]">
+    <testcase name="getAllEvents_200" classname="kitchen.controller.KitchenEventControllerWebTest" time="0.199" displayname="getAllEvents_200()" uniqueid="[engine:junit-jupiter]/[class:kitchen.controller.KitchenEventControllerWebTest]/[method:getAllEvents_200()]"/>
+    <testcase name="getByOrderId_200" classname="kitchen.controller.KitchenEventControllerWebTest" time="0.02" displayname="getByOrderId_200()" uniqueid="[engine:junit-jupiter]/[class:kitchen.controller.KitchenEventControllerWebTest]/[method:getByOrderId_200()]"/>
+  </testsuite>
+  <testsuite name="kitchen.service.KitchenEventServiceTest" time="0.003" displayname="KitchenEventServiceTest" uniqueid="[engine:junit-jupiter]/[class:kitchen.service.KitchenEventServiceTest]">
+    <testcase name="getAll_returnsList" classname="kitchen.service.KitchenEventServiceTest" time="0.003" displayname="getAll_returnsList()" uniqueid="[engine:junit-jupiter]/[class:kitchen.service.KitchenEventServiceTest]/[method:getAll_returnsList()]"/>
+  </testsuite>
+  <testsuite name="kitchen.KitchenServiceApplicationTests" time="0.006" displayname="KitchenServiceApplicationTests" uniqueid="[engine:junit-jupiter]/[class:kitchen.KitchenServiceApplicationTests]">
+    <testcase name="contextLoads" classname="kitchen.KitchenServiceApplicationTests" time="0.006" displayname="contextLoads()" uniqueid="[engine:junit-jupiter]/[class:kitchen.KitchenServiceApplicationTests]/[method:contextLoads()]"/>
+  </testsuite>
+</testrun>

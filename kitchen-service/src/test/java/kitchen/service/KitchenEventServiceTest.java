@@ -1,0 +1,30 @@
+package kitchen.service;
+import kitchen.repository.KitchenEventRepository;
+import kitchen.store.KitchenEventEntity;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
+public class KitchenEventServiceTest {
+
+	  	private KitchenEventRepository repo;
+	    private KitchenEventService service;
+
+	    @BeforeEach
+	    void setUp() {
+	        repo = mock(KitchenEventRepository.class);
+	        service = new KitchenEventService(repo);
+	    }
+
+	    @Test
+	    void getAll_returnsList() {
+	        when(repo.findAll()).thenReturn(List.of(new KitchenEventEntity(), new KitchenEventEntity()));
+	        var list = service.getAll();
+	        assertEquals(2, list.size());
+	        verify(repo).findAll();
+	    }
+}

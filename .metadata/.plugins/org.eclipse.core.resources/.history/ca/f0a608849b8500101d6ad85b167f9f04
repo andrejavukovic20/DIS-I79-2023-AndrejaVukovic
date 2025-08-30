@@ -1,0 +1,56 @@
+package kitchen;
+
+import kitchen.events.OrderEventDto;
+import kitchen.store.KitchenEventStore;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.MockedStatic;
+
+import java.time.Instant;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+public class OrderListenerTest {
+	@Test
+    void handleOrderCreated_savesIncoming_emitsReady_savesReady_noSleep() throws Exception {
+        var readyNotifier = mock(ReadyNotifier.class);
+        var store = mock(KitchenEventStore.class);
+        var listener = new OrderListener(readyNotifier, store);
+
+        // Ulazni CREATED događaj
+        var created = new OrderEventDto();
+        created.setEventId("e-created");
+        created.setOrderId(77L);
+        created.setEventType("CREATED");
+        created.setSource("ORDER");
+        created.setCorrelationId("corr-xyz");
+        created.setOccuredAt(Instant.now());
+
+        // Mockujemo Thread.sleep da ne čeka 3–7 sekundi (zahtijeva mockito-inline)
+        try (MockedStatic<Thread> ignored = mockStatic(Thread.class)) {
+            ignored.when(() -> Thread.sleep(anyLong())).thenAnswer(inv -> null);
+
+            listener.handleOrderCreated(created);
+        }
+
+        // 1) CREATED je sačuvan
+        verify(store).save(created);
+
+        // 2) Poslat READY
+        ArgumentCaptor<OrderEventDto> readyCap = ArgumentCaptor.forClass(OrderEventDto.class);
+        verify(readyNotifier).sendOrderReady(readyCap.capture());
+
+        var ready = readyCap.getValue();
+        assertEquals("READY", ready.getEventType());
+        assertEquals("KITCHEN", ready.getSource());
+        assertEquals(77L, ready.getOrderId());
+        assertEquals("corr-xyz", ready.getCorrelationId());
+        assertNotNull(ready.getChef());
+        assertNotNull(ready.getOccuredAt());
+        assertNotNull(ready.getPrepSeconds());
+        assertTrue(ready.getPrepSeconds() >= 3 && ready.getPrepSeconds() <= 7);
+
+        // 3) READY je sačuvan
+        verify(store, times(2)).save(any(OrderEventDto.class));
+    }
+}

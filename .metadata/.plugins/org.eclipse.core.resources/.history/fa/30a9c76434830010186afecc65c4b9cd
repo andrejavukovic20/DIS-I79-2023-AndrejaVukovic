@@ -1,0 +1,9 @@
+package kitchen;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface KitchenEventRepository extends JpaRepository<KitchenEventEntity, Long> {
+    List<KitchenEventEntity> findByOrderId(Long orderId);
+}

@@ -1,6 +1,0 @@
-package order;
-
-@Configuration
-public class RabbitConfig {
-
-}
