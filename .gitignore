@@ -1,0 +1,7 @@
+# IDE / build artefakti
+.metadata/
+.settings/
+.project
+.classpath
+.idea/
+**/target/

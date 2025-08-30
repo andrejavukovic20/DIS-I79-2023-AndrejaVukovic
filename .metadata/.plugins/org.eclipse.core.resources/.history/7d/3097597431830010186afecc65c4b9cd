@@ -1,6 +1,0 @@
-package kitchen.service;
-
-@Service
-public class KitchenEventService {
-
-}

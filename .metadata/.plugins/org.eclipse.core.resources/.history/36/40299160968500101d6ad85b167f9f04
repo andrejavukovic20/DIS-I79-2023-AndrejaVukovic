@@ -1,9 +1,0 @@
-package order;
-
-public class OrderServiceApplicationTests {
-
-	 @Test
-	    void contextLoads() {
-	        // prolazi ako se app context digne bez greške
-	    }
-}

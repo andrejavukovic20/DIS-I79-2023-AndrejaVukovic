@@ -1,6 +1,0 @@
-package notification;
-
-@SpringBootTest
-public class NotificationServiceApplicationTest {
-
-}

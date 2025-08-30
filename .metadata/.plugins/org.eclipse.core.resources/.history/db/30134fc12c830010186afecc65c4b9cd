@@ -1,5 +1,0 @@
-package kitchen;
-
-public interface KitchenEventRepository {
-
-}
