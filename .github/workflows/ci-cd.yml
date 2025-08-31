@@ -1,9 +1,15 @@
-name: CI (build / test / compose)
+name: CI/CD (build / test / images)
 
 on:
   push:
     branches: [main, develop]
+    tags: ['v*']
   workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  OWNER: ${{ github.repository_owner }}
+  JAVA_VERSION: '17'
 
 jobs:
   test:
@@ -24,19 +30,18 @@ jobs:
       run:
         working-directory: ${{ matrix.svc }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup JDK 17
+      - name: Setup JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: ${{ env.JAVA_VERSION }}
           cache: maven
 
       - name: Maven build & test (policy by branch)
         run: |
-          if [[ "${GITHUB_REF##*/}" == "main" ]]; then
+          if [[ "${GITHUB_REF##*/}" == "main" || "${GITHUB_REF}" == refs/tags/v* ]]; then
             mvn -q -DskipITs=false test
           else
             mvn -q -DskipITs=true  test
@@ -47,8 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Start dependencies only (db + mq)
         run: docker compose up -d postgres rabbitmq
@@ -56,17 +60,69 @@ jobs:
       - name: Build all services (dev/demo)
         run: docker compose build
 
-      - name: Run stack
+      - name: Run stack & wait for gateway
         run: |
+          set -e
           docker compose up -d
-          sleep 30
-
-      - name: Healthcheck
-        run: |
-          (curl -fsS http://localhost:8080/actuator/health || curl -fsS http://localhost:8080/) \
-          && echo "Gateway OK"
-          curl -fsS http://localhost:8081/actuator/health || true
+          for i in {1..60}; do
+            if curl -fsS http://localhost:8080/actuator/health >/dev/null 2>&1; then
+              echo "Gateway OK"; exit 0
+            fi
+            sleep 2
+          done
+          echo "Gateway not ready, dumping logs..."
+          docker compose logs gateway-service
+          exit 1
 
       - name: Cleanup
         if: always()
-        run: docker compose down
+        run: docker compose down -v
+
+  images:
+    name: Build & Push images
+    runs-on: ubuntu-latest
+    needs: test
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compute tags
+        id: meta
+        run: |
+          SHA_TAG=${GITHUB_SHA::7}
+          if [[ "${GITHUB_REF}" == refs/heads/develop ]]; then
+            echo "TAG_SUFFIX=dev-${SHA_TAG}" >> $GITHUB_OUTPUT
+            echo "LATEST_SUFFIX=dev-latest" >> $GITHUB_OUTPUT
+          elif [[ "${GITHUB_REF}" == refs/heads/main ]]; then
+            echo "TAG_SUFFIX=main-${SHA_TAG}" >> $GITHUB_OUTPUT
+            echo "LATEST_SUFFIX=latest" >> $GITHUB_OUTPUT
+          elif [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+            echo "TAG_SUFFIX=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
+            echo "LATEST_SUFFIX=latest" >> $GITHUB_OUTPUT
+          else
+            echo "TAG_SUFFIX=${SHA_TAG}" >> $GITHUB_OUTPUT
+            echo "LATEST_SUFFIX=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build & push (all services)
+        run: |
+          svcs=("eureka-server" "gateway-service" "menu-service" "order-service" "kitchen-service" "delivery-service" "notification-service")
+          for svc in "${svcs[@]}"; do
+            IMAGE="${REGISTRY}/${OWNER}/${svc}"
+            echo ">> Building ${IMAGE}:${{ steps.meta.outputs.TAG_SUFFIX }}"
+            docker build -t "${IMAGE}:${{ steps.meta.outputs.TAG_SUFFIX }}" "${svc}"
+            docker push "${IMAGE}:${{ steps.meta.outputs.TAG_SUFFIX }}"
+            if [[ -n "${{ steps.meta.outputs.LATEST_SUFFIX }}" ]]; then
+              docker tag  "${IMAGE}:${{ steps.meta.outputs.TAG_SUFFIX }}" "${IMAGE}:${{ steps.meta.outputs.LATEST_SUFFIX }}"
+              docker push "${IMAGE}:${{ steps.meta.outputs.LATEST_SUFFIX }}"
+            fi
+          done

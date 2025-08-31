@@ -6,7 +6,7 @@ services:
     container_name: postgres
     environment:
       POSTGRES_USER: appuser
-      POSTGRES_PASSWORD: secret
+      POSTGRES_PASSWORD: ${DB_PASS}
       POSTGRES_DB: restaurant
     ports:
       - "5432:5432"
@@ -24,7 +24,7 @@ services:
     container_name: rabbitmq
     ports:
       - "5672:5672"
-      - "15672:15672"   # web UI: http://localhost:15672
+      - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
@@ -71,7 +71,7 @@ services:
       - EUREKA_URL=http://eureka-server:8761/eureka
       - DB_URL=jdbc:postgresql://postgres:5432/restaurant
       - DB_USER=appuser
-      - DB_PASS=secret
+      - DB_PASS=${DB_PASS}
       - DB_SCHEMA=menu
       - RABBIT_HOST=rabbitmq
       - JAVA_TOOL_OPTIONS=-Xms128m -Xmx256m -XX:+ExitOnOutOfMemoryError
@@ -93,8 +93,8 @@ services:
       - EUREKA_URL=http://eureka-server:8761/eureka
       - DB_URL=jdbc:postgresql://postgres:5432/restaurant
       - DB_USER=appuser
-      - DB_PASS=secret
-      - DB_SCHEMA=orders   
+      - DB_PASS=${DB_PASS}
+      - DB_SCHEMA=orders
       - RABBIT_HOST=rabbitmq
       - JAVA_TOOL_OPTIONS=-Xms128m -Xmx256m -XX:+ExitOnOutOfMemoryError
     depends_on:
@@ -115,7 +115,7 @@ services:
       - EUREKA_URL=http://eureka-server:8761/eureka
       - DB_URL=jdbc:postgresql://postgres:5432/restaurant
       - DB_USER=appuser
-      - DB_PASS=secret
+      - DB_PASS=${DB_PASS}
       - DB_SCHEMA=kitchen
       - RABBIT_HOST=rabbitmq
       - JAVA_TOOL_OPTIONS=-Xms128m -Xmx256m -XX:+ExitOnOutOfMemoryError
@@ -152,8 +152,8 @@ services:
     environment:
       - EUREKA_URL=http://eureka-server:8761/eureka
       - RABBIT_HOST=rabbitmq
-      - MAIL_USER=andrejatestmejl@gmail.com
-      - MAIL_PASS=kpjn gcrp cmvf wbet
+      - MAIL_USER=${MAIL_USER}
+      - MAIL_PASS=${MAIL_PASS}
       - JAVA_TOOL_OPTIONS=-Xms64m -Xmx128m -XX:+ExitOnOutOfMemoryError
     depends_on:
       rabbitmq:

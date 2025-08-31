@@ -15,3 +15,6 @@ target/
 # OS / misc
 .DS_Store
 *.log
+
+# Local environment variables
+.env
