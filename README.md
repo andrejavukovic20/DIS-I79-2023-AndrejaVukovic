@@ -41,7 +41,9 @@ On na osnovu adrese zna kome da proslijedi zahtjev.
 U mikrouslugama, gdje ima vise servisa (Order, Menu, Kitchen, Delivery, Notification), svaki od njih se registruje u Eureku prilikom pokretanja. 
 Na taj nacin, Eureka održava centralni imenik svih aktivnih instanci servisa.
 
-#CI/CD Pipeline
+![Arhitektura sistema](Diagram.png)
+
+# CI/CD Pipeline
 
 GitHub Actions pipeline automatski pokrece **build** i **test** procese na svakom push-u na granama **main** i **develop**.
 
