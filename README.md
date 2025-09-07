@@ -51,7 +51,7 @@ GitHub Actions pipeline automatski pokrece **build** i **test** procese na svako
 - Build (Kompajliranje/Dockerizacija): Automatski build svih servisa koristeci Maven i Docker. Svaki servis dobija svoju Docker sliku koja se cuva u GHCR 
 (GitHub Container Registry).
 - Test (Unit, Integration i ostali testovi):
-	- Na main grani i tagovima pokrecu se svi testovi (unit + integration).
+	- Na main grani pokrecu se svi testovi (unit + integration).
 	- Na develop grani pokrecu se samo osnovni testovi.
 - Docker integracija (Smoke test): Koristi docker-compose da podigne sve servise (Postgres, RabbitMQ, Eureka, Gateway i aplikacione servise) i 
 provjeri da li sistem radi zajedno.
