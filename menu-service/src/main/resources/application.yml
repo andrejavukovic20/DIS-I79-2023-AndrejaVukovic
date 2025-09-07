@@ -24,6 +24,18 @@ spring:
     password: ${RABBIT_PASS:guest}
     virtual-host: ${RABBIT_VHOST:/}
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,prometheus"
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      
 eureka:
   client:
     service-url:
