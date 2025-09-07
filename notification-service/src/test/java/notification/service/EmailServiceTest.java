@@ -30,6 +30,6 @@ public class EmailServiceTest {
 	        assertArrayEquals(new String[]{to}, msg.getTo());
 	        assertEquals(subject, msg.getSubject());
 	        assertEquals(body, msg.getText());
-	        assertEquals("andrejatestmejl@gmail.com", msg.getFrom()); // hardkodirani from iz servisa
+	        assertEquals("andrejatestmejl@gmail.com", msg.getFrom()); 
 	    }
 }

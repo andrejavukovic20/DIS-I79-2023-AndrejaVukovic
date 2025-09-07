@@ -21,7 +21,7 @@ public class MenuService {
 		this.menuRepository = menuRepository;
 	}
 	
-	@Transactional
+	 @Transactional
 	 public List<Long> reserveItems(List<Long> ids){
         List<Menu> locked = menuRepository.findAllForUpdate(ids);
         Map<Long, Menu> byId = locked.stream()

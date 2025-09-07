@@ -17,7 +17,7 @@ import jakarta.persistence.Table;
 @Table(name = "menu")
 public class Menu {
 
-	  @Id
+	  	@Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	    private Long id;
 

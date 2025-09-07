@@ -46,6 +46,7 @@ public class OrderController {
 	                .body(ex.getMessage());
 	    }
 	}
+	
 	@PostMapping
 	public ResponseEntity<?> create(@RequestBody Order order) {
 	    try {
@@ -77,8 +78,8 @@ public class OrderController {
 	    }
 	}
 	
-	  @PatchMapping("/{id}/status")
-	  public ResponseEntity<String> updateStatus(@PathVariable Long id, @RequestParam String value) {
+	@PatchMapping("/{id}/status")
+	public ResponseEntity<String> updateStatus(@PathVariable Long id, @RequestParam String value) {
 	        try {
 	            OrderStatus newStatus = OrderStatus.valueOf(value.toUpperCase());
 	            Order updated = orderService.updateOrderStatus(id, newStatus);

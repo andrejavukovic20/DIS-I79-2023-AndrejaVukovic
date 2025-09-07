@@ -32,14 +32,12 @@ public class OrderServiceTest {
 	        service = new OrderService(repository, menuClient, publisher);
 	    }
 
-	    // helpers
 	    private Order newOrder(List<Long> ids) {
 	        Order o = new Order();
 	        o.setMenuIds(ids);
 	        return o;
 	    }
 
-	    // ------- getAll / getById
 	    @Test
 	    void getAllOrders_returnsList() {
 	        when(repository.findAll()).thenReturn(List.of(new Order(), new Order()));
@@ -64,7 +62,6 @@ public class OrderServiceTest {
 	        assertEquals("Item not found", ex.getMessage());
 	    }
 
-	    // ------- createOrder (happy path)
 	    @Test
 	    void createOrder_ok_reserves_menu_emits_created_event() {
 	        var input = newOrder(List.of(1L, 2L));
@@ -81,17 +78,14 @@ public class OrderServiceTest {
 	        assertEquals(OrderStatus.CREATED, saved.getStatus());
 	        assertNotNull(saved.getCreatedAt());
 
-	        // spremljen je red
 	        ArgumentCaptor<Order> captor = ArgumentCaptor.forClass(Order.class);
 	        verify(repository, atLeastOnce()).save(captor.capture());
 	        assertEquals(OrderStatus.CREATED, captor.getValue().getStatus());
 
-	        // poslat CREATED event
 	        verify(publisher).publishOrderCreatedEvent(eq(42L), anyString());
 	        verify(publisher, never()).publishOutOfStockEvent(any(), anyList(), anyString());
 	    }
 
-	    // ------- createOrder (out of stock)
 	    @Test
 	    void createOrder_outOfStock_emits_ooS_event_saves_cancelled_then_409() {
 	        var input = newOrder(List.of(1L, 2L, 3L));
@@ -104,18 +98,15 @@ public class OrderServiceTest {
 	        assertEquals(409, ex.getStatusCode().value());
 	        assertTrue(ex.getReason().contains("OUT_OF_STOCK"));
 
-	        // provjeri da je CANCELLED snimljen
 	        ArgumentCaptor<Order> captor = ArgumentCaptor.forClass(Order.class);
 	        verify(repository).save(captor.capture());
 	        assertEquals(OrderStatus.CANCELLED, captor.getValue().getStatus());
 	        assertNotNull(captor.getValue().getCreatedAt());
 
-	        // poslat OOS event, a ne CREATED
 	        verify(publisher).publishOutOfStockEvent(isNull(), eq(missing), anyString());
 	        verify(publisher, never()).publishOrderCreatedEvent(anyLong(), anyString());
 	    }
 
-	    // ------- updateOrder
 	    @Test
 	    void updateOrder_replacesMenuIds_andSaves() {
 	        Order existing = new Order();
@@ -132,7 +123,6 @@ public class OrderServiceTest {
 	        verify(repository).save(existing);
 	    }
 
-	    // ------- deleteOrder
 	    @Test
 	    void deleteOrder_ok() {
 	        when(repository.existsById(8L)).thenReturn(true);
@@ -148,7 +138,6 @@ public class OrderServiceTest {
 	        verify(repository, never()).deleteById(anyLong());
 	    }
 
-	    // ------- updateOrderStatus
 	    @Test
 	    void updateOrderStatus_sets_and_saves() {
 	        Order existing = new Order();

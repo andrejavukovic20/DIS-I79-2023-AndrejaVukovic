@@ -15,16 +15,16 @@ public class DeliveryListener {
 	private final DeliveryNotifier notifier;
 	
 	public DeliveryListener(DeliveryNotifier notifier) {
-		this.notifier = notifier;
-	}
-	
+			this.notifier = notifier;
+		}
+		
 	@RabbitListener(queuesToDeclare = @Queue(value = OrderQueues.ORDER_READY, durable = "true"))
 	public void handleOrderReady(OrderEventDto ready) throws InterruptedException {
-		 System.out.println("[DELIVERY] Received ready for orderId=" + ready.getOrderId()
-								         + " chef=" + ready.getChef()
-								         + " prep=" + ready.getPrepSeconds() + "s"
-								         + " corrId=" + ready.getCorrelationId());
-		 
+			 System.out.println("[DELIVERY] Received ready for orderId=" + ready.getOrderId()
+									         + " chef=" + ready.getChef()
+									         + " prep=" + ready.getPrepSeconds() + "s"
+									         + " corrId=" + ready.getCorrelationId());
+			 
 		DeliveryStatus status;
 		
 		status = DeliveryStatus.ASSIGNED;
@@ -52,5 +52,4 @@ public class DeliveryListener {
         
 		notifier.sendDelivered(delivered);
 	}
-	
 }

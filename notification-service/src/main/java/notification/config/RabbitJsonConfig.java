@@ -21,7 +21,7 @@ public class RabbitJsonConfig {
 	public Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
 	    ObjectMapper mapper = Jackson2ObjectMapperBuilder.json()
 	            .modules(new JavaTimeModule())
-	            .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS) // ISO-8601 umjesto epoch long
+	            .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS) 
 	            .build();
 
 	    Jackson2JsonMessageConverter converter = new Jackson2JsonMessageConverter(mapper);
@@ -35,6 +35,7 @@ public class RabbitJsonConfig {
 	    converter.setJavaTypeMapper(typeMapper);
 	    return converter;
 	}
+	
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory cf, Jackson2JsonMessageConverter conv) {
         RabbitTemplate tpl = new RabbitTemplate(cf);

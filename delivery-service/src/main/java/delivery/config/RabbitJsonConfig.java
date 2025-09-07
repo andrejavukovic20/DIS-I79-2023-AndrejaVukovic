@@ -1,6 +1,5 @@
 package delivery.config;
 
-import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -33,11 +32,13 @@ public class RabbitJsonConfig {
 	    typeMapper.setTrustedPackages(
 	            "order.events", "kitchen.events", "delivery.events", "notification.events", "events"
 	    );
+	    
 	    typeMapper.setTypePrecedence(Jackson2JavaTypeMapper.TypePrecedence.INFERRED);
 
 	    converter.setJavaTypeMapper(typeMapper);
 	    return converter;
 	}
+	
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory cf, Jackson2JsonMessageConverter conv) {
         RabbitTemplate tpl = new RabbitTemplate(cf);

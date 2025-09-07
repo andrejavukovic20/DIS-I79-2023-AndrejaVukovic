@@ -18,10 +18,8 @@ public class NotificationListenerTest {
 	        delivered.setOrderId(42L);
 	        delivered.setCorrelationId("corr-xyz");
 
-	        // act
 	        listener.handleDelivered(delivered);
 
-	        // expected values po tvojoj implementaciji
 	        String expectedTo = "andrejatestmejl@gmail.com";
 	        String expectedSubject = "Your order 42 has been delivered!";
 	        String expectedBody =

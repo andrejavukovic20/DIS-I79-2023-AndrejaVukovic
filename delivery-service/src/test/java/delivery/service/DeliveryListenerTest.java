@@ -18,7 +18,7 @@ public class DeliveryListenerTest {
 	    @Timeout(20) 
 	    void handleOrderReady_emitsDelivered_withRealSleep() throws Exception {
 	        DeliveryNotifier notifier = mock(DeliveryNotifier.class);
-	        DeliveryListener listener = new DeliveryListener(notifier); // bez promjene logike
+	        DeliveryListener listener = new DeliveryListener(notifier); 
 
 	        OrderEventDto ready = new OrderEventDto();
 	        ready.setOrderId(123L);
@@ -32,7 +32,7 @@ public class DeliveryListenerTest {
 
 	        long elapsedMs = System.currentTimeMillis() - start;
 
-	        assertTrue(elapsedMs >= 7_800L, "Očekivano trajanje ≥ ~8s, bilo je: " + elapsedMs + " ms");
+	        assertTrue(elapsedMs >= 7_800L, "Expected duration >= 8, was: " + elapsedMs + " ms");
 
 	        ArgumentCaptor<OrderEventDto> cap = ArgumentCaptor.forClass(OrderEventDto.class);
 	        verify(notifier).sendDelivered(cap.capture());

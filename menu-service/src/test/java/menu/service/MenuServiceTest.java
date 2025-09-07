@@ -31,7 +31,6 @@ public class MenuServiceTest {
 	        return new Menu(id, "Espresso", "Strong coffee", 2.5, Category.DRINK, true, 5);
 	    }
 
-	    // ---- getAllMenuItem
 	    @Test
 	    void testGetAllMenuItem() {
 	        when(repository.findAll()).thenReturn(List.of(new Menu(), new Menu()));
@@ -40,7 +39,6 @@ public class MenuServiceTest {
 	        verify(repository).findAll();
 	    }
 
-	    // ---- getMenuItemById
 	    @Test
 	    void testGetMenuItemByIdExists() {
 	        when(repository.findById(1L)).thenReturn(Optional.of(sample(1L)));
@@ -55,7 +53,6 @@ public class MenuServiceTest {
 	        assertEquals("Item not found", ex.getMessage());
 	    }
 
-	    // ---- createMenuItem
 	    @Test
 	    void testCreateMenuItemOk() {
 	        var toSave = sample(null);
@@ -75,7 +72,6 @@ public class MenuServiceTest {
 	        assertEquals("Category is required.", ex.getMessage());
 	    }
 
-	    // ---- updateMenuItem
 	    @Test
 	    void testUpdateMenuItemOk() {
 	        when(repository.findById(5L)).thenReturn(Optional.of(sample(5L)));
@@ -90,7 +86,6 @@ public class MenuServiceTest {
 	        verify(repository).save(any(Menu.class));
 	    }
 
-	    // ---- deleteMenuItem
 	    @Test
 	    void testDeleteById() {
 	        when(repository.existsById(1L)).thenReturn(true);
@@ -105,7 +100,6 @@ public class MenuServiceTest {
 	        assertEquals("Menu item with ID 9 does not exist.", ex.getMessage());
 	    }
 
-	    // ---- getByCatgory
 	    @Test
 	    void testGetByCategoryValid() {
 	        when(repository.findByCategory(Category.FOOD)).thenReturn(
@@ -122,7 +116,6 @@ public class MenuServiceTest {
 	        assertTrue(ex.getMessage().contains("Invalid category"));
 	    }
 
-	    // ---- getAvailableItems / getAvailaleItemsByIds
 	    @Test
 	    void testGetAvailableItems() {
 	        when(repository.findByAvailableTrue()).thenReturn(List.of(sample(1L)));
@@ -140,7 +133,6 @@ public class MenuServiceTest {
 	        verify(repository).findByIdInAndAvailableTrue(List.of(1L, 2L));
 	    }
 
-	    // ---- reserveItems (ključna logika)
 	    @Test
 	    void testReserveItemsAllOk() {
 	        var ids = List.of(1L, 2L);
@@ -161,12 +153,13 @@ public class MenuServiceTest {
 	        assertEquals(1, saved.get(0).getStock());
 	        assertEquals(0, saved.get(1).getStock());
 	    }
+	    
 	    @Test
 	    void testReserveItemsSomeMissing() {
 	        var ids = List.of(1L, 2L, 3L);
-	        var a = new Menu(1L, "A", "a", 1.0, Category.FOOD, true, 0);   // out of stock
-	        var b = new Menu(2L, "B", "b", 2.0, Category.DRINK, false, 5); // not available
-	        when(repository.findAllForUpdate(ids)).thenReturn(List.of(a, b)); // 3L ne postoji
+	        var a = new Menu(1L, "A", "a", 1.0, Category.FOOD, true, 0);   
+	        var b = new Menu(2L, "B", "b", 2.0, Category.DRINK, false, 5); 
+	        when(repository.findAllForUpdate(ids)).thenReturn(List.of(a, b)); 
 
 	        var missing = service.reserveItems(ids);
 

@@ -43,5 +43,4 @@ management:
 eureka:
   client:
     service-url:
-      # u Dockeru koristimo ime servisa, ne localhost
       defaultZone: ${EUREKA_URL:http://eureka-server:8761/eureka}
